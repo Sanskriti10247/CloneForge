@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // ─────────────────────────────────────────────
-// index.js — Clonify CLI Entry Point
-// A conversational AI agent for cloning any website
+// index.js — CloneForge CLI Entry Point 🎀
+// A cute conversational AI agent for cloning any website 🌸
 // ─────────────────────────────────────────────
 
 import readline from "node:readline";
@@ -51,12 +51,12 @@ function normalizeCommand(input) {
 const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
-  prompt: colors.brand("  🤖 clonify > "),
+  prompt: colors.brand("  🎀 cloneForge > "),
 });
 
 // ── Welcome message ──
 console.log(
-  colors.info("  Welcome! I'm your AI website cloning agent.")
+  colors.info("  Welcome! 🎀 I'm your adorable AI website cloning agent! 🌸")
 );
 console.log(
   colors.info("  Give me a URL and I'll scrape + clone it, or describe what to build.\n")
@@ -82,7 +82,7 @@ console.log(
 console.log(
   colors.dim("    help             → Show available commands")
 );
-console.log(colors.dim("    exit             → Quit Clonify\n"));
+console.log(colors.dim("    exit             → Quit CloneForge 🎀\n"));
 
 rl.prompt();
 
@@ -99,7 +99,7 @@ rl.on("line", async (line) => {
 
   // ── Exit ──
   if (command === "exit" || lowerInput === "quit" || lowerInput === "q") {
-    logInfo("Goodbye! 👋");
+    logInfo("Goodbye! 🎀 Have a purr-fect day! 👋");
     process.exit(0);
   }
 
@@ -161,7 +161,7 @@ rl.on("line", async (line) => {
     logSeparator();
     logAction("Opening generated website in browser...");
     await open(htmlPath);
-    logSuccess("Website opened in browser! 🚀");
+    logSuccess("Website opened in browser! 🌸✨");
     logInfo("Type 'improve <section>' to refine, or enter a new instruction.");
   } catch (err) {
     logError(`Agent failed: ${err.message}`);
@@ -172,14 +172,14 @@ rl.on("line", async (line) => {
 });
 
 rl.on("close", () => {
-  logInfo("\nGoodbye! 👋");
+  logInfo("\nGoodbye! 🎀 Have a purr-fect day! 👋");
   process.exit(0);
 });
 
 // ── Help text ──
 function showHelp() {
   logSeparator();
-  console.log(colors.brand.bold("  📖 Clonify — Available Commands\n"));
+  console.log(colors.brand.bold("  🎀 CloneForge — Available Commands 🌸\n"));
   console.log(
     colors.info("  <url>                → Scrape & clone any website")
   );
@@ -196,6 +196,6 @@ function showHelp() {
     colors.info("  open                 → Open last generated site in browser")
   );
   console.log(colors.info("  help                 → Show this help menu"));
-  console.log(colors.info("  exit                 → Quit Clonify"));
+  console.log(colors.info("  exit                 → Quit CloneForge"));
   logSeparator();
 }

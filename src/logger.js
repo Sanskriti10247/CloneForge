@@ -7,45 +7,39 @@ import ora from "ora";
 
 // ── Color palette ──
 const colors = {
-  brand: chalk.hex("#6C5CE7"),       // Purple accent
-  thinking: chalk.hex("#74B9FF"),    // Light blue
-  action: chalk.hex("#FDCB6E"),      // Warm yellow
-  success: chalk.hex("#00B894"),     // Green
-  error: chalk.hex("#E17055"),       // Coral red
-  info: chalk.hex("#DFE6E9"),       // Light gray
-  highlight: chalk.hex("#A29BFE"),   // Soft purple
+  brand: chalk.hex("#FF69B4"),       // Hot pink accent 🎀
+  thinking: chalk.hex("#FFB6C1"),    // Light pink 🌸
+  action: chalk.hex("#FFC0CB"),      // Soft pink ✨
+  success: chalk.hex("#FF1493"),     // Deep pink 💖
+  error: chalk.hex("#FF4500"),       // Reddish orange 🍓
+  info: chalk.hex("#FF99CC"),       // Pink info 🎀
+  highlight: chalk.hex("#DB7093"),   // Pale violet red 🌷
   dim: chalk.dim,
   bold: chalk.bold,
 };
 
 /**
- * Prints the Clonify ASCII banner at startup.
+ * Prints the CloneForge ASCII banner at startup. 🎀
  */
 export function printBanner() {
   console.log();
   console.log(
     colors.brand.bold(`
-   ██████╗██╗      ██████╗ ███╗   ██╗██╗███████╗██╗   ██╗
-  ██╔════╝██║     ██╔═══██╗████╗  ██║██║██╔════╝╚██╗ ██╔╝
-  ██║     ██║     ██║   ██║██╔██╗ ██║██║█████╗   ╚████╔╝ 
-  ██║     ██║     ██║   ██║██║╚██╗██║██║██╔══╝    ╚██╔╝  
-  ╚██████╗███████╗╚██████╔╝██║ ╚████║██║██║        ██║   
-   ╚═════╝╚══════╝ ╚═════╝ ╚═╝  ╚═══╝╚═╝╚═╝        ╚═╝  
+   ██████╗██╗      ██████╗ ███╗  ██╗███████╗███████╗ ██████╗ ██████╗  ██████╗ ███████╗
+  ██╔════╝██║     ██╔═══██╗████╗ ██║██╔════╝██╔════╝██╔═══██╗██╔══██╗██╔════╝ ██╔════╝
+  ██║     ██║     ██║   ██║██╔██╗██║█████╗  █████╗  ██║   ██║██████╔╝██║  ███╗█████╗  
+  ██║     ██║     ██║   ██║██║╚██╗█║██╔══╝  ██╔══╝  ██║   ██║██╔══██╗██║   ██║██╔══╝  
+  ╚██████╗███████╗╚██████╔╝██║ ╚███║███████╗██║     ╚██████╔╝██║  ██║╚██████╔╝███████╗
+   ╚═════╝╚══════╝ ╚═════╝ ╚═╝  ╚══╝╚══════╝╚═╝      ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ ╚══════╝ 🎀🌸
   `)
   );
   console.log(
-    colors.dim("  ─────────────────────────────────────────────────")
-  );
-  console.log(
-    colors.info("  🤖 AI-Powered Website Cloner Agent")
+    colors.info("  🎀 Adorable AI-Powered Website Cloner Agent 🌸")
   );
   console.log(
     colors.dim(
       "  Built with Gemini AI • gemma-4-26b-a4b-it"
     )
-  );
-  console.log(
-    colors.dim("  ─────────────────────────────────────────────────\n")
   );
 }
 
@@ -53,35 +47,35 @@ export function printBanner() {
  * Log a thinking/reasoning step.
  */
 export function logThinking(message) {
-  console.log(colors.thinking(`  🧠 [Thinking] ${message}`));
+  console.log(colors.thinking(`  💭 [Thinking] ${message} 🎀`));
 }
 
 /**
  * Log an action being taken.
  */
 export function logAction(message) {
-  console.log(colors.action(`  ⚡ [Action]   ${message}`));
+  console.log(colors.action(`  ✨ [Action]   ${message} 🌸`));
 }
 
 /**
  * Log a success result.
  */
 export function logSuccess(message) {
-  console.log(colors.success(`  ✅ [Done]     ${message}`));
+  console.log(colors.success(`  💖 [Done]     ${message} ✨`));
 }
 
 /**
  * Log an error.
  */
 export function logError(message) {
-  console.log(colors.error(`  ❌ [Error]    ${message}`));
+  console.log(colors.error(`  🍓 [Error]    ${message} 🐾`));
 }
 
 /**
  * Log informational text.
  */
 export function logInfo(message) {
-  console.log(colors.info(`  ℹ  [Info]     ${message}`));
+  console.log(colors.info(`  🎀 [Info]     ${message} 🐾`));
 }
 
 /**
@@ -89,7 +83,7 @@ export function logInfo(message) {
  */
 export function logImprove(iteration, total, message) {
   console.log(
-    colors.highlight(`  🔁 [Improve ${iteration}/${total}] ${message}`)
+    colors.highlight(`  🌷 [Improve ${iteration}/${total}] ${message} 🎀`)
   );
 }
 
@@ -98,7 +92,7 @@ export function logImprove(iteration, total, message) {
  */
 export function logSeparator() {
   console.log(
-    colors.dim("\n  ─────────────────────────────────────────────────\n")
+    colors.dim("\n  🎀 🌸 ✨ 💖 🍓 🐾 🎀 🌸 ✨ 💖 🍓 🐾 🎀 🌸 ✨ 💖 🍓 🐾 🎀\n")
   );
 }
 
@@ -110,8 +104,8 @@ export function logSeparator() {
 export function startSpinner(text) {
   return ora({
     text: colors.thinking(text),
-    color: "cyan",
-    spinner: "dots12",
+    color: "magenta",
+    spinner: "hearts",
     indent: 2,
   }).start();
 }

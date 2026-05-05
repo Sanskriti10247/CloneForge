@@ -1,4 +1,4 @@
-# 🤖 Clonify — AI Website Cloner Agent
+# 🎀 CloneForge — AI Website Cloner Agent 🌸
 
 A conversational CLI agent that can **scrape and clone any website** using Playwright + Gemini AI. Give it a URL, and it will analyze the design, extract content, and generate a faithful HTML/CSS/JS clone.
 
@@ -26,8 +26,8 @@ A conversational CLI agent that can **scrape and clone any website** using Playw
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/SamarthPD-21/clonify.git
-cd clonify
+git clone https://github.com/Sanskriti10247/CloneForge.git
+cd CloneForge
 ```
 
 ### 2. Install dependencies
@@ -54,9 +54,9 @@ npm start
 ### 5. Clone any website!
 
 ```
-🤖 clonify > clone https://www.scaler.com
-🤖 clonify > clone https://stripe.com
-🤖 clonify > build a SaaS landing page
+🎀 cloneForge > clone https://www.scaler.com
+🎀 cloneForge > clone https://stripe.com
+🎀 cloneForge > build a SaaS landing page
 ```
 
 The agent will:
@@ -78,12 +78,12 @@ The agent will:
 | `improve <section>` | Re-improve a specific section |
 | `open` | Re-open the last generated site |
 | `help` | Show available commands |
-| `exit` | Quit Clonify |
+| `exit` | Quit CloneForge 🎀 |
 
 ## 🏗 Architecture
 
 ```
-clonify/
+cloneForge/
 ├── index.js              # CLI entry point & interactive prompt
 ├── src/
 │   ├── scraper.js        # Playwright website scraper (design extraction)
