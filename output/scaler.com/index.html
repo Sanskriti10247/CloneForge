@@ -1,0 +1,1674 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+    content="The investment that compounds. Scaler gives you strong technical foundations, AI integrated at every stage, and a curriculum that evolves as the market does." />
+  <title>Scaler Academy — Become the Professional Built for the Next Decade in AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: "Inter", sans-serif;
+      color: #444;
+      background: #ffffff;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    img {
+      max-width: 100%;
+    }
+
+    /* Scroll reveal base state */
+    .reveal-section {
+      opacity: 0;
+      transform: translateY(30px);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+
+    .reveal-section.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Scroll to top button */
+    #scrollTopBtn {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 48px;
+      height: 48px;
+      background: #0052cc;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      display: none;
+      z-index: 999;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 82, 204, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    #scrollTopBtn:hover {
+      background: #003d99;
+      transform: translateY(-2px);
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      .s-header-wrapper {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background-color: #ffffff;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        font-family: "Inter", sans-serif;
+      }
+
+      .s-header-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .s-header-logo {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a2e;
+        letter-spacing: 2px;
+        text-decoration: none;
+        text-transform: uppercase;
+      }
+
+      /* Desktop Navigation */
+      .s-header-nav-desktop {
+        display: flex;
+        align-items: center;
+        gap: 40px;
+      }
+
+      .s-header-nav-list {
+        display: flex;
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        gap: 32px;
+      }
+
+      .s-header-nav-link {
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 500;
+        color: #444444;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        transition: color 0.3s ease;
+      }
+
+      .s-header-nav-link:hover {
+        color: #0052cc;
+      }
+
+      /* CTA Button */
+      .s-header-cta {
+        background-color: #0052cc;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 0;
+        /* Critical: Square corners */
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        white-space: nowrap;
+      }
+
+      .s-header-cta:hover {
+        background-color: #003d99;
+      }
+
+      /* Mobile Menu Logic (Checkbox Hack) */
+      .s-header-toggle-input {
+        display: none;
+      }
+
+      .s-header-hamburger {
+        display: none;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 24px;
+        height: 18px;
+        cursor: pointer;
+        z-index: 1100;
+      }
+
+      .s-header-hamburger span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: #1a1a2e;
+        transition: all 0.3s ease;
+      }
+
+      .s-header-mobile-menu {
+        position: absolute;
+        top: 70px;
+        left: 0;
+        width: 100%;
+        background-color: #ffffff;
+        flex-direction: column;
+        padding: 30px 0;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
+        display: none;
+        /* Hidden by default */
+        list-style: none;
+        margin: 0;
+      }
+
+      .s-header-mobile-menu li {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+
+      .s-header-mobile-menu a {
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 500;
+        color: #444444;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        display: block;
+        padding: 10px 0;
+      }
+
+      /* Responsive Media Queries */
+      @media (max-width: 768px) {
+
+        .s-header-nav-desktop,
+        .s-header-cta-desktop {
+          display: none;
+        }
+
+        .s-header-hamburger {
+          display: flex;
+        }
+
+        /* Toggle Mobile Menu visibility */
+        .s-header-toggle-input:checked~.s-header-mobile-menu {
+          display: flex;
+        }
+
+        /* Hamburger Animation */
+        .s-header-toggle-input:checked~.s-header-hamburger span:nth-child(1) {
+          transform: translateY(8px) rotate(45deg);
+        }
+
+        .s-header-toggle-input:checked~.s-header-hamburger span:nth-child(2) {
+          opacity: 0;
+        }
+
+        .s-header-toggle-input:checked~.s-header-hamburger span:nth-child(3) {
+          transform: translateY(-8px) rotate(-45deg);
+        }
+
+        .s-header-mobile-cta-wrapper {
+          padding: 0 20px 30px 20px;
+          text-align: center;
+        }
+
+        .s-header-mobile-cta-wrapper .s-header-cta {
+          display: inline-block;
+          width: 100%;
+          box-sizing: border-box;
+        }
+      }
+
+      @media (min-width: 769px) {
+        .s-header-mobile-cta-wrapper {
+          display: none;
+        }
+      }
+    </style>
+
+    <header class="s-header-wrapper">
+      <div class="s-header-container">
+        <!-- Logo -->
+        <a href="#" class="s-header-logo">SCALER</a>
+
+        <!-- Desktop Nav -->
+        <nav class="s-header-nav-desktop">
+          <ul class="s-header-nav-list">
+            <li><a href="#" class="s-header-nav-link">Masterclass</a></li>
+            <li><a href="#" class="s-header-nav-link">AI Labs</a></li>
+            <li><a href="#" class="s-header-nav-link">Alumni</a></li>
+            <li><a href="#" class="s-header-nav-link">Placement Report</a></li>
+          </ul>
+        </nav>
+
+        <!-- Desktop CTA -->
+        <div class="s-header-cta-desktop">
+          <a href="#" class="s-header-cta">Request a Callback</a>
+        </div>
+
+        <!-- Mobile Hamburger & Menu -->
+        <input type="checkbox" id="s-header-toggle" class="s-header-toggle-input" />
+        <label for="s-header-toggle" class="s-header-hamburger">
+          <span></span>
+          <span></span>
+          <span></span>
+        </label>
+
+        <div class="s-header-mobile-menu">
+          <ul style="width: 100%; list-style: none; padding: 0; margin: 0">
+            <li><a href="#">Masterclass</a></li>
+            <li><a href="#">AI Labs</a></li>
+            <li><a href="#">Alumni</a></li>
+            <li><a href="#">Placement Report</a></li>
+          </ul>
+          <div class="s-header-mobile-cta-wrapper">
+            <a href="#" class="s-header-cta">Request a Callback</a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      .s-hero-section {
+        font-family: "Inter", sans-serif;
+        background-color: #ffffff;
+        background-image: radial-gradient(circle at 2px 2px, #e8f0fe 1px, transparent 0);
+        background-size: 40px 40px;
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 120px;
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
+      }
+
+      /* Decorative Abstract Shapes */
+      .s-hero-section::before {
+        content: "";
+        position: absolute;
+        top: -10%;
+        right: -5%;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba(0, 82, 204, 0.05) 0%, rgba(255, 255, 255, 0) 70%);
+        border-radius: 50%;
+        z-index: 0;
+      }
+
+      .s-hero-container {
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        position: relative;
+        z-index: 1;
+      }
+
+      .s-hero-content {
+        max-width: 800px;
+      }
+
+      .s-hero-headline {
+        font-size: 56px;
+        font-weight: 700;
+        color: #1a1a2e;
+        line-height: 1.1;
+        margin: 0 0 24px 0;
+      }
+
+      .s-hero-subtitle {
+        font-size: 18px;
+        color: #666666;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 0 40px 0;
+      }
+
+      /* Program Pills Styling */
+      .s-hero-pills-wrapper {
+        margin-bottom: 40px;
+        width: 100%;
+      }
+
+      .s-hero-pills {
+        display: flex;
+        gap: 12px;
+        overflow-x: auto;
+        padding: 10px 0;
+        scrollbar-width: none;
+        /* Firefox */
+        -ms-overflow-style: none;
+        /* IE/Edge */
+      }
+
+      .s-hero-pills::-webkit-scrollbar {
+        display: none;
+        /* Chrome/Safari */
+      }
+
+      .s-hero-pill {
+        flex: 0 0 auto;
+        background: #f5f7fa;
+        border: 1px solid #e0e0e0;
+        padding: 10px 20px;
+        font-size: 14px;
+        color: #333333;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+      }
+
+      .s-hero-pill:hover {
+        border-color: #0052cc;
+        color: #0052cc;
+      }
+
+      /* CTA Buttons */
+      .s-hero-ctas {
+        display: flex;
+        gap: 16px;
+        margin-bottom: 60px;
+      }
+
+      .s-hero-btn {
+        display: inline-block;
+        text-decoration: none;
+        text-align: center;
+        padding: 14px 32px;
+        font-size: 13px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        border-radius: 0;
+        /* CRITICAL: Square corners */
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+      }
+
+      .s-hero-btn-primary {
+        background: #0052cc;
+        color: #ffffff;
+      }
+
+      .s-hero-btn-primary:hover {
+        background: #003d99;
+      }
+
+      .s-hero-btn-secondary {
+        background: transparent;
+        color: #0052cc;
+        border: 2px solid #0052cc;
+      }
+
+      .s-hero-btn-secondary:hover {
+        background: #0052cc;
+        color: #ffffff;
+      }
+
+      /* AI Readiness Banner */
+      .s-hero-banner {
+        background: #ffffff;
+        border: 1px solid #f0f0f0;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+        padding: 24px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 800px;
+      }
+
+      .s-hero-banner-text {
+        font-size: 18px;
+        font-weight: 500;
+        color: #1a1a2e;
+      }
+
+      .s-hero-banner-btn {
+        padding: 12px 24px;
+        font-size: 12px;
+        letter-spacing: 1px;
+      }
+
+      /* Responsive Design */
+      @media (max-width: 1024px) {
+        .s-hero-section {
+          padding: 60px 60px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .s-hero-section {
+          padding: 40px 20px;
+          min-height: auto;
+        }
+
+        .s-hero-headline {
+          font-size: 36px;
+        }
+
+        .s-hero-ctas {
+          flex-direction: column;
+        }
+
+        .s-hero-banner {
+          flex-direction: column;
+          text-align: center;
+          gap: 20px;
+          padding: 30px 20px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .s-hero-headline {
+          font-size: 32px;
+        }
+
+        .s-hero-subtitle {
+          font-size: 16px;
+        }
+      }
+    </style>
+
+    <section class="s-hero-section">
+      <div class="s-hero-container">
+        <div class="s-hero-content">
+          <h1 class="s-hero-headline">Become the Professional Built for the Next Decade in AI.</h1>
+          <p class="s-hero-subtitle">
+            The investment that compounds. Strong technical foundations, AI integrated at every stage, and a
+            curriculum that evolves as the market does.
+          </p>
+
+          <div class="s-hero-pills-wrapper">
+            <div class="s-hero-pills">
+              <a href="#" class="s-hero-pill">Modern Software and AI Engineering</a>
+              <a href="#" class="s-hero-pill">Modern Data Science and ML with Specialisation in AI</a>
+              <a href="#" class="s-hero-pill">Advanced AIML with Agentic AI</a>
+              <a href="#" class="s-hero-pill">DevOps, Cloud & AI Platform Engineering</a>
+            </div>
+          </div>
+
+          <div class="s-hero-ctas">
+            <a href="#" class="s-hero-btn s-hero-btn-primary">REQUEST A CALLBACK</a>
+            <a href="#" class="s-hero-btn s-hero-btn-secondary">BOOK FREE LIVE CLASS</a>
+          </div>
+
+          <div class="s-hero-banner">
+            <span class="s-hero-banner-text">Check how AI-Ready is your profile</span>
+            <a href="#" class="s-hero-btn s-hero-btn-primary s-hero-banner-btn">UNLOCK YOUR SCORE NOW</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      .s-features-section {
+        background-color: #0d121f;
+        padding: 80px 120px;
+        font-family: "Inter", sans-serif;
+        overflow: hidden;
+      }
+
+      .s-features-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .s-features-header {
+        margin-bottom: 60px;
+      }
+
+      .s-features-label {
+        display: block;
+        color: #0052cc;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        margin-bottom: 16px;
+      }
+
+      .s-features-title {
+        color: #ffffff;
+        font-size: 40px;
+        font-weight: 700;
+        line-height: 1.2;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      .s-features-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        margin-bottom: 60px;
+      }
+
+      .s-features-card {
+        background: #161d2f;
+        padding: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
+
+      .s-features-card:hover {
+        transform: translateY(-5px);
+        border-color: rgba(0, 82, 204, 0.5);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .s-features-icon-wrapper {
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .s-features-icon {
+        width: 40px;
+        height: 40px;
+        color: #0052cc;
+      }
+
+      .s-features-card-title {
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 600;
+        margin: 0 0 16px 0;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+      }
+
+      .s-features-card-desc {
+        color: #f5f7fa;
+        font-size: 16px;
+        line-height: 1.6;
+        margin: 0;
+        font-weight: 400;
+      }
+
+      .s-features-footer {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        margin-top: 40px;
+      }
+
+      .s-features-footer-text {
+        color: #a0a0a0;
+        font-size: 16px;
+        margin-bottom: 28px;
+        font-weight: 400;
+      }
+
+      .s-features-btn-secondary {
+        display: inline-block;
+        border: 2px solid #0052cc;
+        color: #ffffff;
+        background: #0052cc;
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 14px 36px;
+        text-decoration: none;
+        border-radius: 0;
+        transition: all 0.3s ease;
+      }
+
+      .s-features-btn-secondary:hover {
+        background: #003d99;
+        border-color: #003d99;
+      }
+
+      /* Tablet Responsive */
+      @media (max-width: 1024px) {
+        .s-features-section {
+          padding: 80px 60px;
+        }
+      }
+
+      /* Mobile/Tablet Responsive */
+      @media (max-width: 768px) {
+        .s-features-section {
+          padding: 60px 40px;
+        }
+
+        .s-features-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .s-features-title {
+          font-size: 32px;
+        }
+
+        .s-features-card {
+          padding: 32px;
+        }
+      }
+
+      /* Small Mobile */
+      @media (max-width: 480px) {
+        .s-features-section {
+          padding: 40px 20px;
+        }
+
+        .s-features-title {
+          font-size: 28px;
+        }
+      }
+    </style>
+
+    <section class="s-features-section">
+      <div class="s-features-container">
+        <div class="s-features-header">
+          <span class="s-features-label">Why Scaler</span>
+          <h2 class="s-features-title">Four things no other program gives you</h2>
+        </div>
+
+        <div class="s-features-grid">
+          <!-- Card 1 -->
+          <div class="s-features-card">
+            <div class="s-features-icon-wrapper">
+              <svg class="s-features-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+              </svg>
+            </div>
+            <h3 class="s-features-card-title">AI-Integrated Curriculum</h3>
+            <p class="s-features-card-desc">
+              AI-integrated curriculum. Every phase is structured around how the best technical teams work today, with
+              AI embedded in how problems are framed, built, and shipped. Updated quarterly.
+            </p>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="s-features-card">
+            <div class="s-features-icon-wrapper">
+              <svg class="s-features-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="s-features-card-title">AI Powered Platform</h3>
+            <p class="s-features-card-desc">
+              AI-assisted coding woven into every lab, assignment, and DSA problem with a 24×7 AI Companion that
+              hints, critiques, and pair-programs alongside you. Specialisation in Generative AI included.
+            </p>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="s-features-card">
+            <div class="s-features-icon-wrapper">
+              <svg class="s-features-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+            </div>
+            <h3 class="s-features-card-title">Lifelong Learning Access</h3>
+            <p class="s-features-card-desc">
+              The curriculum moves as the market does. When the industry shifts, your knowledge shifts with it at no
+              extra cost. You're not buying a 2026 snapshot. You're buying a living system. Built to last.
+            </p>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="s-features-card">
+            <div class="s-features-icon-wrapper">
+              <svg class="s-features-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+              </svg>
+            </div>
+            <h3 class="s-features-card-title">Strong Foundations</h3>
+            <p class="s-features-card-desc">
+              The things that matter in software don't change as fast as the headlines. DSA. System design.
+              Engineering judgment. AI makes those fundamentals hit harder, not the other way around. Depth that
+              doesn't expire.
+            </p>
+          </div>
+        </div>
+
+        <div class="s-features-footer">
+          <p class="s-features-footer-text">AI-first curriculum built by 100+ engineers</p>
+          <a href="#" class="s-features-btn-secondary">DOWNLOAD BROCHURE</a>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      :root {
+        --s-navy: #0d121f;
+        --s-blue: #0052cc;
+        --s-white: #ffffff;
+        --s-text-light: #a0a0a0;
+        --s-transition: all 0.3s ease;
+      }
+
+      .s-companies-section {
+        padding: 100px 0;
+        background-color: var(--s-navy);
+        font-family: "Inter", sans-serif;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .s-companies-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 24px;
+        text-align: center;
+      }
+
+      .s-companies-heading {
+        font-size: 40px;
+        font-weight: 700;
+        color: var(--s-white);
+        margin-bottom: 64px;
+        letter-spacing: -0.03em;
+        line-height: 1.2;
+      }
+
+      /* Marquee Logic */
+      .s-marquee-wrapper {
+        position: relative;
+        width: 100%;
+        display: flex;
+        overflow: hidden;
+        /* Masking edges for a professional fade effect */
+        -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+      }
+
+      .s-marquee-track {
+        display: flex;
+        width: max-content;
+        animation: s-marquee-scroll 40s linear infinite;
+      }
+
+      .s-marquee-track:hover {
+        animation-play-state: paused;
+      }
+
+      .s-logo-item {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 40px;
+        height: 60px;
+      }
+
+      .s-logo-svg {
+        height: 32px;
+        width: auto;
+        /* Initial state: Grayscale and bright (white-ish) to look premium on dark navy */
+        filter: grayscale(100%) brightness(0) invert(1);
+        opacity: 0.7;
+        transition: var(--s-transition);
+      }
+
+      .s-logo-item:hover .s-logo-svg {
+        filter: grayscale(0%) brightness(1) invert(0);
+        opacity: 1;
+        transform: scale(1.05);
+      }
+
+      @keyframes s-marquee-scroll {
+        0% {
+          transform: translateX(0);
+        }
+
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* Responsive Adjustments */
+      @media (max-width: 1024px) {
+        .s-companies-section {
+          padding: 80px 0;
+        }
+
+        .s-companies-heading {
+          font-size: 32px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .s-companies-section {
+          padding: 60px 0;
+        }
+
+        .s-companies-heading {
+          font-size: 28px;
+          margin-bottom: 48px;
+        }
+
+        .s-logo-item {
+          padding: 0 25px;
+        }
+
+        .s-logo-svg {
+          height: 24px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .s-companies-heading {
+          font-size: 24px;
+        }
+      }
+    </style>
+
+    <section class="s-companies-section">
+      <div class="s-companies-container">
+        <h2 class="s-companies-heading">900+ companies have hired Scaler alumni</h2>
+      </div>
+
+      <div class="s-marquee-wrapper">
+        <!-- The track contains two sets of the same logos to create the seamless loop -->
+        <div class="s-marquee-track">
+          <!-- Set 1 -->
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4" />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853" />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                fill="#FBBC05" />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <!-- Meta -->
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.128 22 16.991 22 12c0-5.523-4.477-10-10-10z"
+                fill="#0668E1" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <!-- Amazon -->
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15.62 13.1c-.45 0-.85.15-1.15.45-.3.3-.45.7-.45 1.2 0 .5.15.9.45 1.2.3.3.7.45 1.2.45.45 0 .8-.15 1.1-.45.3-.3.45-.7.45-1.2 0-.5-.15-.9-.45-1.2-.3-.3-.7-.45-1.2-.45zm-4.15 0c-.45 0-.85.15-1.15.45-.3.3-.45.7-.45 1.2 0 .5.15.9.45 1.2.3.3.7.45 1.2.45.45 0 .8-.15 1.1-.45.3-.3.45-.7.45-1.2 0-.5-.15-.9-.45-1.2-.3-.3-.7-.45-1.2-.45z"
+                fill="#FF9900" />
+              <path d="M10 21l-8-12h2l3 5 3-5 3 5 3-5 2 12H10z" fill="#FF9900" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <!-- Microsoft -->
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="11" height="11" fill="#f25022" />
+              <rect x="13" y="0" width="11" height="11" fill="#7fbb00" />
+              <rect x="0" y="13" width="11" height="11" fill="#00a4ef" />
+              <rect x="13" y="13" width="11" height="11" fill="#ffb900" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <!-- Adobe -->
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22.28 10.15c-.33-1.2-1.2-2.15-2.4-2.75-1.2-.6-2.55-.85-3.9-.85-1.1 0-2.15.2-3.1.55-.95.35-1.75.85-2.4 1.5-.65.65-1.05 1.45-1.15 2.4-.1 1 .1 2.05.55 3.15.45 1.1 1.2 1.95 2.25 2.55.8.4 1.7.65 2.7.75.85.1 1.75.1 2.65 0 .95-.1 1.85-.35 2.65-.75.8-.4 1.45-1.05 1.95-1.95.45-.85.65-1.8.65-2.85z"
+                fill="#FF0000" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <!-- LinkedIn -->
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                fill="#0077B5" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <!-- PayPal -->
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M21.5 12.5c0-2.5-1.5-4-3-4.5s-3.5-.5-5 0c-1.5.5-3 2-4.5 2.5s-3 .5-4.5-.5c-1.5-.5-3-2-4.5-2.5S1 10 1 12.5c0 2.5 1.5 4 3 4.5s3.5.5 5 0c1.5-.5 3-2 4.5-2.5s3-.5 4.5.5c1.5.5 3 2 4.5 2.5 1.5 0 3-1.5 3-4z"
+                fill="#003087" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <!-- Oracle -->
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                fill="#F80000" />
+              <text x="12" y="14" font-family="Arial" font-size="8" text-anchor="middle" fill="white">ORACLE</text>
+            </svg>
+          </div>
+
+          <!-- Set 2 (Duplicate for seamless loop) -->
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                fill="#4285F4" />
+              <path
+                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                fill="#34A853" />
+              <path
+                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
+                fill="#FBBC05" />
+              <path
+                d="M12 5.38c1.62 0 3.06.56 4.21 1.66l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                fill="#EA4335" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.879V14.89h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.989C18.343 21.128 22 16.991 22 12c0-5.523-4.477-10-10-10z"
+                fill="#0668E1" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M15.62 13.1c-.45 0-.85.15-1.15.45-.3.3-.45.7-.45 1.2 0 .5.15.9.45 1.2.3.3.7.45 1.2.45.45 0 .8-.15 1.1-.45.3-.3.45-.7.45-1.2 0-.5-.15-.9-.45-1.2-.3-.3-.7-.45-1.2-.45zm-4.15 0c-.45 0-.85.15-1.15.45-.3.3-.45.7-.45 1.2 0 .5.15.9.45 1.2.3.3.7.45 1.2.45.45 0 .8-.15 1.1-.45.3-.3.45-.7.45-1.2 0-.5-.15-.9-.45-1.2-.3-.3-.7-.45-1.2-.45z"
+                fill="#FF9900" />
+              <path d="M10 21l-8-12h2l3 5 3-5 3 5 3-5 2 12H10z" fill="#FF9900" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <rect x="0" y="0" width="11" height="11" fill="#f25022" />
+              <rect x="13" y="0" width="11" height="11" fill="#7fbb00" />
+              <rect x="0" y="13" width="11" height="11" fill="#00a4ef" />
+              <rect x="13" y="13" width="11" height="11" fill="#ffb900" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M22.28 10.15c-.33-1.2-1.2-2.15-2.4-2.75-1.2-.6-2.55-.85-3.9-.85-1.1 0-2.15.2-3.1.55-.95.35-1.75.85-2.4 1.5-.65.65-1.05 1.45-1.15 2.4-.1 1 .1 2.05.55 3.15.45 1.1 1.2 1.95 2.25 2.55.8.4 1.7.65 2.7.75.85.1 1.75.1 2.65 0 .95-.1 1.85-.35 2.65-.75.8-.4 1.45-1.05 1.95-1.95.45-.85.65-1.8.65-2.85z"
+                fill="#FF0000" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+                fill="#0077B5" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M21.5 12.5c0-2.5-1.5-4-3-4.5s-3.5-.5-5 0c-1.5.5-3 2-4.5 2.5s-3 .5-4.5-.5c-1.5-.5-3-2-4.5-2.5S1 10 1 12.5c0 2.5 1.5 4 3 4.5s3.5.5 5 0c1.5-.5 3-2 4.5-2.5s3-.5 4.5.5c1.5.5 3 2 4.5 2.5 1.5 0 3-1.5 3-4z"
+                fill="#003087" />
+            </svg>
+          </div>
+          <div class="s-logo-item">
+            <svg class="s-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path
+                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"
+                fill="#F80000" />
+              <text x="12" y="14" font-family="Arial" font-size="8" text-anchor="middle" fill="white">ORACLE</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      .s-stats-section {
+        padding: 80px 0;
+        background: linear-gradient(180deg, #ffffff 0%, #f5f7fa 100%);
+        font-family: "Inter", sans-serif;
+        overflow: hidden;
+      }
+
+      .s-stats-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+      }
+
+      .s-stats-header {
+        text-align: center;
+        margin-bottom: 64px;
+      }
+
+      .s-stats-title {
+        font-size: 40px;
+        font-weight: 700;
+        color: #1a1a2e;
+        margin: 0 0 20px 0;
+        line-height: 1.2;
+      }
+
+      .s-stats-subtitle {
+        font-size: 20px;
+        font-weight: 500;
+        color: #444444;
+        line-height: 1.6;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+
+      .s-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        margin-bottom: 48px;
+      }
+
+      .s-stats-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+      }
+
+      .s-stats-number {
+        font-size: 56px;
+        font-weight: 700;
+        color: #0052cc;
+        line-height: 1;
+        margin-bottom: 16px;
+      }
+
+      .s-stats-label {
+        font-size: 14px;
+        color: #666666;
+        line-height: 1.5;
+        max-width: 240px;
+        margin: 0 auto;
+      }
+
+      .s-stats-footer {
+        text-align: center;
+        margin-top: 40px;
+      }
+
+      .s-stats-disclaimer {
+        font-size: 13px;
+        color: #999999;
+        margin-bottom: 32px;
+        display: block;
+      }
+
+      .s-stats-btn-primary {
+        display: inline-block;
+        background-color: #0052cc;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        padding: 14px 32px;
+        border-radius: 0;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+      }
+
+      .s-stats-btn-primary:hover {
+        background-color: #003d99;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(0, 82, 204, 0.3);
+      }
+
+      /* Responsive Breakpoints */
+      @media (max-width: 1024px) {
+        .s-stats-section {
+          padding: 60px 0;
+        }
+
+        .s-stats-title {
+          font-size: 36px;
+        }
+
+        .s-stats-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 40px 20px;
+        }
+      }
+
+      @media (max-width: 768px) {
+        .s-stats-container {
+          padding: 0 40px;
+        }
+
+        .s-stats-title {
+          font-size: 32px;
+        }
+
+        .s-stats-subtitle {
+          font-size: 18px;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .s-stats-section {
+          padding: 40px 0;
+        }
+
+        .s-stats-container {
+          padding: 0 20px;
+        }
+
+        .s-stats-grid {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+
+        .s-stats-title {
+          font-size: 28px;
+        }
+
+        .s-stats-number {
+          font-size: 48px;
+        }
+      }
+    </style>
+
+    <section class="s-stats-section">
+      <div class="s-stats-container">
+        <div class="s-stats-header">
+          <h2 class="s-stats-title">In the AI era, proof matters, more than empty promises</h2>
+          <p class="s-stats-subtitle">
+            Founders, engineers, and researchers share what they are actually building, hiring for, and betting on
+          </p>
+        </div>
+
+        <div class="s-stats-grid">
+          <!-- Stat 1 -->
+          <div class="s-stats-item">
+            <div class="s-stats-number">93%</div>
+            <div class="s-stats-label">Career transition rate for the assessed 2024 Academy cohort</div>
+          </div>
+
+          <!-- Stat 2 -->
+          <div class="s-stats-item">
+            <div class="s-stats-number">18 LPA</div>
+            <div class="s-stats-label">Overall median CTC post-Scaler, up from ₹9 LPA pre-Scaler</div>
+          </div>
+
+          <!-- Stat 3 -->
+          <div class="s-stats-item">
+            <div class="s-stats-number">126%</div>
+            <div class="s-stats-label">Median hike in CTC for learners who completed the program</div>
+          </div>
+
+          <!-- Stat 4 -->
+          <div class="s-stats-item">
+            <div class="s-stats-number">₹32 LPA</div>
+            <div class="s-stats-label">Median CTC for the top 25% of the assessed cohort</div>
+          </div>
+        </div>
+
+        <div class="s-stats-footer">
+          <span class="s-stats-disclaimer">Based on the 2024 Scaler career transition assessment</span>
+          <a href="#" class="s-stats-btn-primary">Placement Report</a>
+        </div>
+      </div>
+    </section>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+      /* SUPPORT BAR - Separated from footer for semantic accuracy */
+      .s-support-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 54px;
+        background-color: #0d1b3e;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        color: #ffffff;
+        font-size: 14px;
+        font-family: "Inter", sans-serif;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .s-support-bar a {
+        color: #ffffff;
+        text-decoration: underline;
+        margin-left: 8px;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      .s-support-bar a:hover {
+        color: #0052cc;
+      }
+
+      /* FOOTER MAIN WRAPPER */
+      .s-footer-wrapper {
+        background-color: #0d121f;
+        font-family: "Inter", sans-serif;
+        color: #a0a0a0;
+        padding: 80px 120px 0 120px;
+        position: relative;
+      }
+
+      .s-footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* TOP ROW: LOGO, ADDRESS, APP */
+      .s-footer-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding-bottom: 60px;
+        border-bottom: 1px solid rgba(245, 247, 250, 0.05);
+        /* Using #f5f7fa with opacity */
+      }
+
+      .s-footer-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .s-footer-logo-svg {
+        width: 32px;
+        height: 32px;
+        fill: #ffffff;
+      }
+
+      .s-footer-brand-name {
+        color: #ffffff;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+
+      .s-footer-address {
+        font-size: 14px;
+        line-height: 1.6;
+        color: #a0a0a0;
+        max-width: 350px;
+      }
+
+      .s-footer-app-section {
+        text-align: right;
+      }
+
+      .s-footer-app-label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 16px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+      }
+
+      .s-footer-app-badges {
+        display: flex;
+        gap: 12px;
+        justify-content: flex-end;
+      }
+
+      /* BUTTON STYLES (CRITICAL) */
+      .s-footer-app-badge {
+        display: inline-flex;
+        align-items: center;
+        background: transparent;
+        color: #ffffff;
+        padding: 10px 20px;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid #f5f7fa;
+        /* Using specified color */
+        border-radius: 0;
+        /* Strict square corners */
+        text-transform: uppercase;
+        letter-spacing: 1.8px;
+        transition: all 0.3s ease;
+      }
+
+      .s-footer-app-badge:hover {
+        background: #0052cc;
+        border-color: #0052cc;
+      }
+
+      .s-footer-app-badge svg {
+        margin-right: 10px;
+        fill: currentColor;
+      }
+
+      /* MAIN GRID */
+      .s-footer-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 40px;
+        padding-top: 60px;
+        padding-bottom: 60px;
+      }
+
+      .s-footer-column h4 {
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 28px;
+      }
+
+      .s-footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .s-footer-links li {
+        margin-bottom: 14px;
+      }
+
+      .s-footer-links a {
+        color: #b0b0b0;
+        /* Increased contrast from 888 */
+        text-decoration: none;
+        font-size: 15px;
+        line-height: 1.5;
+        transition: color 0.3s ease;
+      }
+
+      .s-footer-links a:hover {
+        color: #0052cc;
+      }
+
+      /* SOCIALS */
+      .s-footer-socials {
+        display: flex;
+        gap: 18px;
+        margin-top: 10px;
+      }
+
+      .s-footer-social-icon {
+        width: 22px;
+        height: 22px;
+        fill: #a0a0a0;
+        transition:
+          fill 0.3s ease,
+          transform 0.3s ease;
+      }
+
+      .s-footer-social-icon:hover {
+        fill: #0052cc;
+        transform: translateY(-2px);
+      }
+
+      /* BOTTOM BAR */
+      .s-footer-bottom {
+        border-top: 1px solid rgba(245, 247, 250, 0.1);
+        padding-top: 40px;
+        padding-bottom: 100px;
+        /* Space for sticky bar */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+        color: #666;
+      }
+
+      .s-footer-legal-links {
+        display: flex;
+        gap: 20px;
+      }
+
+      .s-footer-legal-links a {
+        color: #666;
+        text-decoration: none;
+      }
+
+      .s-footer-legal-links a:hover {
+        color: #ffffff;
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 1024px) {
+        .s-footer-wrapper {
+          padding: 60px 40px 0 40px;
+        }
+
+        .s-footer-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+
+      @media (max-width: 768px) {
+        .s-footer-wrapper {
+          padding: 40px 20px 0 20px;
+        }
+
+        .s-footer-top {
+          flex-direction: column;
+          gap: 40px;
+          align-items: flex-start;
+        }
+
+        .s-footer-app-section {
+          text-align: left;
+        }
+
+        .s-footer-app-badges {
+          justify-content: flex-start;
+        }
+
+        .s-footer-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+
+        .s-footer-bottom {
+          flex-direction: column;
+          gap: 20px;
+          text-align: center;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .s-footer-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .s-footer-brand-name {
+          font-size: 20px;
+        }
+      }
+    </style>
+
+    <!-- Marketing Component (Separated from Footer) -->
+    <div class="s-support-bar">Need help? Talk to us at 08047939623 or <a href="#">Request a Call ↗</a></div>
+
+    <footer class="s-footer-wrapper">
+      <div class="s-footer-container">
+        <!-- Top Row -->
+        <div class="s-footer-top">
+          <div class="s-footer-brand">
+            <svg class="s-footer-logo-svg" viewBox="0 0 24 24">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            <span class="s-footer-brand-name">Scaler</span>
+          </div>
+
+          <div class="s-footer-address">
+            Interviewbit Software Services Private Limited, 5th Floor, Surya Park II, Electronic City Phase 1,
+            Bengaluru, Karnataka 560100
+          </div>
+
+          <div class="s-footer-app-section">
+            <span class="s-footer-app-label">Download our App</span>
+            <div class="s-footer-app-badges">
+              <a href="#" class="s-footer-app-badge">
+                <svg viewBox="0 0 24 24">
+                  <path
+                    d="M18.71 19.5c-.83 1.24-1.71 2.45-3.1 2.48-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .76-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.89 1.22-2.12 1.08-3.35-1.03.04-2.3.68-3.04 1.56-.67.77-1.26 2.03-1.1 3.24 1.16.09 2.34-.57 3.06-1.45z" />
+                </svg>
+                App Store
+              </a>
+              <a href="#" class="s-footer-app-badge">
+                <svg viewBox="0 0 24 24">
+                  <path d="M3,20.5V3.5C3,2.91 3.34,2.39 3.84,2.15L13.69,12L3.84,21.85C3.34,21.61 3,21.09 3,20.5Z" />
+                </svg>
+                Play Store
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Columns -->
+        <div class="s-footer-grid">
+          <div class="s-footer-column">
+            <h4>Explore Scaler</h4>
+            <ul class="s-footer-links">
+              <li><a href="#">Modern Software and AI Engineering</a></li>
+              <li><a href="#">Modern Data Science and ML</a></li>
+              <li><a href="#">DevOps, Cloud & AI Platform</a></li>
+              <li><a href="#">Advanced AI & Machine Learning</a></li>
+            </ul>
+          </div>
+
+          <div class="s-footer-column">
+            <h4>Resources</h4>
+            <ul class="s-footer-links">
+              <li><a href="#">Alumni Reviews</a></li>
+              <li><a href="#">Blogs</a></li>
+              <li><a href="#">Contact Us</a></li>
+              <li><a href="#">Careers</a></li>
+            </ul>
+          </div>
+
+          <div class="s-footer-column">
+            <h4>Others</h4>
+            <ul class="s-footer-links">
+              <li><a href="#">About Us</a></li>
+              <li><a href="#">Become a Mentor</a></li>
+              <li><a href="#">Become a TA</a></li>
+              <li><a href="#">Hire From Us</a></li>
+              <li><a href="#">Terms of Use</a></li>
+            </ul>
+          </div>
+
+          <div class="s-footer-column">
+            <h4>Socials</h4>
+            <div class="s-footer-socials">
+              <a href="#" aria-label="Youtube">
+                <svg class="s-footer-social-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                </svg>
+              </a>
+              <a href="#" aria-label="LinkedIn">
+                <svg class="s-footer-social-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" />
+                </svg>
+              </a>
+              <a href="#" aria-label="Instagram">
+                <svg class="s-footer-social-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
+                </svg>
+              </a>
+              <a href="#" aria-label="Twitter">
+                <svg class="s-footer-social-icon" viewBox="0 0 24 24">
+                  <path
+                    d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.84 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="s-footer-bottom">
+          <div>© 2026 InterviewBit Software Services Pvt. Ltd. All Rights Reserved.</div>
+          <div class="s-footer-legal-links">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Use</a>
+            <a href="#">Cookie Policy</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+    <button id="scrollTopBtn" title="Back to top">↑</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+
+</html>
