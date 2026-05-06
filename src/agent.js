@@ -26,7 +26,7 @@ import { writeHTML, writeJS, deriveFolderName, setOutputDir } from "./fileWriter
 import { scrapeWebsite, formatDesignBrief } from "./scraper.js";
 
 const MAX_IMPROVE_ITERATIONS = 2;   // Number of improvement loops per section
-const MIN_QUALITY_SCORE = 7;        // Score threshold to skip further improvements
+const MIN_QUALITY_SCORE = 8.5;      // Score threshold to skip further improvements
 
 /**
  * Extract a URL from the user instruction if present.

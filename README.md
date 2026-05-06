@@ -11,7 +11,7 @@ A conversational CLI agent that can **scrape and clone any website** using Playw
 - **🌐 Scrape Any Website** — Uses Playwright to extract colors, fonts, layout, content, and structure from any URL
 - **🧠 Intelligent Planning** — Analyzes scraped data to plan which sections to build
 - **🧱 Step-by-Step Generation** — Each section (Header, Hero, Footer, etc.) is generated individually
-- **🔁 Self-Improving Agent Loop** — Each section goes through evaluate → improve cycles until quality ≥ 7/10
+- **🔁 Self-Improving Agent Loop** — Each section goes through evaluate → improve cycles until quality ≥ 8.5/10
 - **🎨 Faithful Design Cloning** — Replicates the exact color palette, fonts, button styles, and layout of the target
 - **💬 Conversational CLI** — Interactive terminal with colored logs, spinners, and real-time progress
 - **🚀 Auto-Open** — Generated website opens automatically in your browser

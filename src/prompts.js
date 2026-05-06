@@ -132,7 +132,7 @@ Evaluate on these criteria (total score out of 10):
 6. Responsiveness — Has media queries for mobile/tablet?
 7. Interactivity — Hover effects, transitions, animations?
 
-Be strict but fair. Score 7+ only if it genuinely looks professional.
+Be strict but fair. Score 8.5+ only if it genuinely looks professional.
 
 Output ONLY valid JSON: {"score": <number>, "improvements": ["improvement 1", "improvement 2", ...]}
 Output ONLY the JSON, nothing else.`;
