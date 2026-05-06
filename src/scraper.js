@@ -4,6 +4,9 @@
 // ─────────────────────────────────────────────
 
 import { chromium } from "playwright";
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
 import {
   logThinking,
   logAction,
@@ -15,6 +18,20 @@ import {
   spinnerFail,
 } from "./logger.js";
 
+const SCRAPER_CACHE_DIR = path.resolve(".cache", "scraper");
+function ensureScraperCacheDir() {
+  try {
+    if (!fs.existsSync(SCRAPER_CACHE_DIR)) fs.mkdirSync(SCRAPER_CACHE_DIR, { recursive: true });
+  } catch (e) {
+    // best-effort cache
+  }
+}
+
+function getCachePathForUrl(url) {
+  const hash = crypto.createHash("sha256").update(url).digest("hex").slice(0, 12);
+  return path.join(SCRAPER_CACHE_DIR, `${hash}.json`);
+}
+
 /**
  * Scrape a website and return a structured design brief.
  * @param {string} url - The full URL to scrape
@@ -23,6 +40,24 @@ import {
 export async function scrapeWebsite(url) {
   const spinner = startSpinner(`Launching browser for ${url}...`);
   let browser;
+
+  // Check disk cache first (unless forced)
+  try {
+    ensureScraperCacheDir();
+    const cachePath = getCachePathForUrl(url);
+    if (process.env.FORCE_SCRAPE !== "1" && fs.existsSync(cachePath)) {
+      try {
+        const cached = JSON.parse(fs.readFileSync(cachePath, "utf-8"));
+        spinnerSuccess(spinner, `Using cached scrape for ${url}`);
+        logInfo(`Loaded cached scrape: ${cachePath}`);
+        return cached;
+      } catch (e) {
+        // parse error — fall through to live scrape
+      }
+    }
+  } catch (e) {
+    // ignore cache errors, proceed with live scrape
+  }
 
   try {
     browser = await chromium.launch({ headless: true });
@@ -369,6 +404,15 @@ export async function scrapeWebsite(url) {
 
     spinnerSuccess(extractSpinner, `Extracted ${siteData.sections.length} sections, ${siteData.colors.bgColors.length} bg colors, ${siteData.fonts.length} fonts, ${siteData.images.length} images`);
 
+    // Write cache for this scrape (best-effort)
+    try {
+      const cachePath = getCachePathForUrl(url);
+      fs.writeFileSync(cachePath, JSON.stringify({ url, ...siteData }), "utf-8");
+      logInfo(`Cached scrape to: ${cachePath}`);
+    } catch (e) {
+      // ignore cache write errors
+    }
+
     // ── Log scraped details ──
     logAction("Scrape summary:");
     logInfo(`Title: ${siteData.title || "(empty)"}`);
@@ -516,4 +560,33 @@ export function formatDesignBrief(siteData) {
   }
 
   return lines.join("\n");
+}
+
+/**
+ * Produce a compact, token-friendly design brief (short string)
+ * @param {object} siteData
+ * @param {number} maxChars
+ */
+export function compactDesignBrief(siteData, maxChars = 800) {
+  if (!siteData) return "";
+  const parts = [];
+  if (siteData.url) parts.push(`URL: ${siteData.url}`);
+  if (siteData.title) parts.push(`TITLE: ${siteData.title}`);
+  if (siteData.metaDesc) parts.push(`DESC: ${siteData.metaDesc}`);
+  if (siteData.logoText) parts.push(`LOGO: ${siteData.logoText}`);
+  if (siteData.navLinks && siteData.navLinks.length) parts.push(`NAV: ${siteData.navLinks.slice(0, 6).map(n => n.text).join(", ")}`);
+  if (siteData.fonts && siteData.fonts.length) parts.push(`FONTS: ${siteData.fonts.slice(0, 3).join(", ")}`);
+  if (siteData.colors) {
+    if (siteData.colors.bgColors && siteData.colors.bgColors.length) parts.push(`BG: ${siteData.colors.bgColors.slice(0, 6).join(", ")}`);
+    if (siteData.colors.textColors && siteData.colors.textColors.length) parts.push(`TEXT: ${siteData.colors.textColors.slice(0, 6).join(", ")}`);
+  }
+  if (siteData.sections && siteData.sections.length) {
+    const secs = siteData.sections.slice(0, 3).map(s => `${s.type}${s.heading ? `:${s.heading.substring(0, 60)}` : ""}`);
+    parts.push(`SECTIONS: ${secs.join(" | ")}`);
+  }
+  if (siteData.footer && siteData.footer.columns) parts.push(`FOOTER COLS: ${siteData.footer.columns.length}`);
+
+  let brief = parts.join("\n");
+  if (brief.length > maxChars) brief = brief.slice(0, maxChars - 12) + "\n...[truncated]";
+  return brief;
 }

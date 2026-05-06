@@ -25,10 +25,10 @@ import {
   spinnerFail,
 } from "./logger.js";
 import { writeHTML, writeJS, deriveFolderName, setOutputDir } from "./fileWriter.js";
-import { scrapeWebsite, formatDesignBrief } from "./scraper.js";
+import { scrapeWebsite, formatDesignBrief, compactDesignBrief } from "./scraper.js";
 
-const MAX_IMPROVE_ITERATIONS = 2;
-const MIN_QUALITY_SCORE = 8.5;
+const MAX_IMPROVE_ITERATIONS = 1;
+const MIN_QUALITY_SCORE = 8.0;
 
 /**
  * Extract a URL from the user instruction if present.
@@ -98,8 +98,10 @@ export async function runAgent(userInstruction) {
 
     try {
       siteData = await scrapeWebsite(targetURL);
-      designBrief = formatDesignBrief(siteData);
-      logSuccess(`Scraped design brief: ${designBrief.split("\n").length} lines of design data`);
+      const fullDesignBrief = formatDesignBrief(siteData);
+      const compactBrief = compactDesignBrief(siteData, 800);
+      designBrief = compactBrief; // use compact brief for all LLM calls
+      logSuccess(`Scraped design brief: ${fullDesignBrief.split("\n").length} lines — compacted to ${compactBrief.length} chars`);
     } catch (err) {
       logError(`Scraping failed: ${err.message}`);
       logAction("Continuing without scrape data — will use AI to infer design...");
@@ -113,7 +115,7 @@ export async function runAgent(userInstruction) {
   const spinner1 = startSpinner("Planning website sections...");
   let sections;
   try {
-    const planResponse = await askLLM(planPrompt(userInstruction, designBrief));
+    const planResponse = await askLLM(planPrompt(userInstruction, designBrief), { maxTokens: 512, temperature: 0.0 });
     sections = parseSections(planResponse);
     spinnerSuccess(spinner1, `Planned ${sections.length} sections: ${sections.join(", ")}`);
   } catch (err) {
@@ -123,47 +125,46 @@ export async function runAgent(userInstruction) {
     logAction(`Using default sections: ${sections.join(", ")}`);
   }
 
-  // ── Step 4: Generate each section with improvement loop ──
+  // ── Step 4: Generate each section with improvement loop (batched concurrency) ──
   const sectionCodes = {};
   let failedSections = 0;
+  const envConcurrency = parseInt(process.env.SECTION_CONCURRENCY, 10);
+  const defaultConcurrency = Math.max(1, Math.ceil(sections.length / 2));
+  const SECTION_CONCURRENCY = (!isNaN(envConcurrency) && envConcurrency >= 1) ? envConcurrency : defaultConcurrency;
+  logInfo(`SECTION_CONCURRENCY=${SECTION_CONCURRENCY} (sections=${sections.length})`);
 
-  for (const section of sections) {
+  async function generateAndImproveSection(section) {
     logSeparator();
     logAction(`Starting work on: ${section.toUpperCase()}`);
 
     // Generate initial version
     const genSpinner = startSpinner(`Generating ${section}...`);
-    let code;
+    let code = null;
     try {
-      const response = await askLLM(
-        generateSectionPrompt(section, sections, designBrief),
-        { maxTokens: 4096 }
-      );
+      const response = await askLLM(generateSectionPrompt(section, sections, designBrief), { maxTokens: 2048, temperature: 0.2 });
       code = extractCode(response, "html");
 
       if (!isValidHTML(code)) {
         spinnerFail(genSpinner, `${section} — generated code is empty or invalid`);
         logError("LLM returned non-HTML content. Skipping section.");
-        failedSections++;
-        continue;
+        return { section, code: null, success: false };
       }
 
       spinnerSuccess(genSpinner, `${section} — initial version generated (${code.length} chars)`);
     } catch (err) {
       spinnerFail(genSpinner, `Failed to generate ${section}`);
       logError(err.message);
-      failedSections++;
-      continue;
+      return { section, code: null, success: false };
     }
 
-    // ── Improvement loop ──
+    // ── Improvement loop (sequential per section) ──
     for (let i = 1; i <= MAX_IMPROVE_ITERATIONS; i++) {
       logImprove(i, MAX_IMPROVE_ITERATIONS, `Evaluating ${section}...`);
 
       const evalSpinner = startSpinner(`Evaluating ${section} quality...`);
       let evaluation;
       try {
-        const evalResponse = await askLLM(evaluatePrompt(section, code, designBrief));
+        const evalResponse = await askLLM(evaluatePrompt(section, code, designBrief), { maxTokens: 512, temperature: 0.0 });
         evaluation = parseEvaluation(evalResponse);
         spinnerSuccess(evalSpinner, `${section} quality score: ${evaluation.score}/10`);
       } catch (err) {
@@ -179,10 +180,7 @@ export async function runAgent(userInstruction) {
       logImprove(i, MAX_IMPROVE_ITERATIONS, `Improving: ${evaluation.improvements.slice(0, 3).join(", ")}`);
       const improveSpinner = startSpinner(`Improving ${section}...`);
       try {
-        const improvedResponse = await askLLM(
-          improvePrompt(section, code, evaluation.improvements, designBrief),
-          { maxTokens: 4096 }
-        );
+        const improvedResponse = await askLLM(improvePrompt(section, code, evaluation.improvements, designBrief), { maxTokens: 1024, temperature: 0.2 });
         const improvedCode = extractCode(improvedResponse, "html");
         if (isValidHTML(improvedCode)) {
           code = improvedCode;
@@ -199,6 +197,16 @@ export async function runAgent(userInstruction) {
 
     sectionCodes[section] = code;
     logSuccess(`${section.toUpperCase()} — finalized ✨`);
+    return { section, code, success: !!code };
+  }
+
+  // Run in batches to respect concurrency limits
+  for (let i = 0; i < sections.length; i += SECTION_CONCURRENCY) {
+    const batch = sections.slice(i, i + SECTION_CONCURRENCY);
+    const results = await Promise.all(batch.map((s) => generateAndImproveSection(s)));
+    for (const r of results) {
+      if (!r.success) failedSections++;
+    }
   }
 
   // ── Check if we have enough valid sections ──
@@ -222,7 +230,7 @@ export async function runAgent(userInstruction) {
   const jsSpinner = startSpinner("Generating JavaScript...");
   let jsCode = "";
   try {
-    const jsResponse = await askLLM(generateScriptPrompt(sections));
+    const jsResponse = await askLLM(generateScriptPrompt(sections), { maxTokens: 512, temperature: 0.2 });
     jsCode = extractCode(jsResponse, "javascript");
     spinnerSuccess(jsSpinner, "JavaScript generated");
   } catch (err) {
@@ -235,7 +243,7 @@ export async function runAgent(userInstruction) {
   const assembleSpinner = startSpinner("Creating HTML shell...");
   let shellHTML;
   try {
-    const shellResponse = await askLLM(assemblePrompt(siteData));
+    const shellResponse = await askLLM(assemblePrompt(siteData), { maxTokens: 2048, temperature: 0.2 });
     shellHTML = extractCode(shellResponse, "html");
 
     if (!isValidHTML(shellHTML)) {
@@ -297,7 +305,7 @@ export async function improveSection(sectionName, currentHTML) {
   const evalSpinner = startSpinner(`Evaluating ${sectionName}...`);
   let evaluation;
   try {
-    const evalResponse = await askLLM(evaluatePrompt(sectionName, currentHTML));
+    const evalResponse = await askLLM(evaluatePrompt(sectionName, currentHTML), { maxTokens: 512, temperature: 0.0 });
     evaluation = parseEvaluation(evalResponse);
     spinnerSuccess(evalSpinner, `Quality: ${evaluation.score}/10`);
   } catch {
@@ -309,7 +317,7 @@ export async function improveSection(sectionName, currentHTML) {
   try {
     const improved = await askLLM(
       improvePrompt(sectionName, currentHTML, evaluation.improvements),
-      { maxTokens: 4096 }
+      { maxTokens: 1024, temperature: 0.2 }
     );
     const code = extractCode(improved, "html");
     if (!isValidHTML(code)) {

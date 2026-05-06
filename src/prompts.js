@@ -12,9 +12,10 @@
  */
 function buildDesignRules(designBrief) {
   if (designBrief) {
+    const briefShort = designBrief.length > 800 ? designBrief.slice(0, 800) + "\n...[truncated]" : designBrief;
     return `
 SCRAPED DESIGN REFERENCE (from the actual target website):
-${designBrief}
+${briefShort}
 
 DESIGN RULES:
 - Replicate the color palette, fonts, and button styles detected above as closely as possible
@@ -52,7 +53,7 @@ DESIGN RULES (use modern premium web design):
  */
 export function planPrompt(userInstruction, designBrief = null) {
   const siteContext = designBrief
-    ? `\n\nHere is the scraped design brief from the target website:\n${designBrief}\n\nUse the section headings detected above to decide what to build.`
+    ? `\n\nHere is the scraped design brief from the target website (condensed):\n${designBrief.length > 600 ? designBrief.slice(0, 600) + "\n...[truncated]" : designBrief}\n\nUse the section headings detected above to decide what to build.`
     : "";
 
   return `You are an AI web development agent. The user wants you to clone a website.

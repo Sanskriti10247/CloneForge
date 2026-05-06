@@ -5,14 +5,29 @@
 
 import { GoogleGenAI } from "@google/genai";
 import dotenv from "dotenv";
+import fs from "node:fs";
+import path from "node:path";
+import crypto from "node:crypto";
 import { logError, logSuccess, logInfo, logAction, startSpinner, spinnerSuccess, spinnerFail } from "./logger.js";
 
 dotenv.config();
 
 const MODEL_NAME = "gemma-4-31b-it";
 
+const LLM_CACHE_DIR = path.resolve(".cache", "llm");
+const LLM_CACHE_DISABLED = process.env.NO_LLM_CACHE === "1" || process.env.LLM_CACHE === "0";
+
 let ai = null;
 let modelVerified = false;
+
+function ensureLLMCacheDir() {
+  if (LLM_CACHE_DISABLED) return;
+  try {
+    if (!fs.existsSync(LLM_CACHE_DIR)) fs.mkdirSync(LLM_CACHE_DIR, { recursive: true });
+  } catch (e) {
+    // ignore cache creation errors — caching is best-effort
+  }
+}
 
 /**
  * Initialize the Gemini AI client.
@@ -33,6 +48,7 @@ export function initLLM() {
 
   ai = new GoogleGenAI({ apiKey });
   logInfo(`LLM initialized with model: ${MODEL_NAME}`);
+  ensureLLMCacheDir();
 }
 
 /**
@@ -135,6 +151,27 @@ export async function askLLM(prompt, options = {}) {
   const maxRetries = options.retries ?? 3;
   let lastError = null;
 
+  // Try to serve from disk cache to save tokens (best-effort)
+  try {
+    if (!LLM_CACHE_DISABLED) {
+      const cacheKey = crypto
+        .createHash("sha256")
+        .update(JSON.stringify({ model: MODEL_NAME, prompt, maxTokens: options.maxTokens ?? 1024, temperature: options.temperature ?? 0.7 }))
+        .digest("hex");
+      const cachePath = path.join(LLM_CACHE_DIR, `${cacheKey}.json`);
+      if (fs.existsSync(cachePath)) {
+        const cached = JSON.parse(fs.readFileSync(cachePath, "utf-8"));
+        if (cached && cached.text) {
+          logInfo("Using cached LLM response (token-saving)");
+          return cached.text;
+        }
+      }
+    }
+  } catch (e) {
+    // If cache read fails, continue without failing the request
+    logInfo("LLM cache read error — proceeding without cache");
+  }
+
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       const response = await ai.models.generateContent({
@@ -142,7 +179,7 @@ export async function askLLM(prompt, options = {}) {
         contents: prompt,
         config: {
           temperature: options.temperature ?? 0.7,
-          maxOutputTokens: options.maxTokens ?? 8192,
+          maxOutputTokens: options.maxTokens ?? 1024,
         },
       });
 
@@ -158,6 +195,20 @@ export async function askLLM(prompt, options = {}) {
           continue;
         }
         throw new Error("LLM returned empty response after all retries. Check model quota.");
+      }
+
+      // Cache successful responses (best-effort)
+      try {
+        if (!LLM_CACHE_DISABLED) {
+          const cacheKey = crypto
+            .createHash("sha256")
+            .update(JSON.stringify({ model: MODEL_NAME, prompt, maxTokens: options.maxTokens ?? 1024, temperature: options.temperature ?? 0.7 }))
+            .digest("hex");
+          const cachePath = path.join(LLM_CACHE_DIR, `${cacheKey}.json`);
+          fs.writeFileSync(cachePath, JSON.stringify({ text, model: MODEL_NAME, ts: Date.now() }), "utf-8");
+        }
+      } catch (e) {
+        // ignore cache write errors
       }
 
       return text;

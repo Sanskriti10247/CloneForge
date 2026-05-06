@@ -159,6 +159,53 @@ User Input (URL or description)
 | Output | Plain HTML + CSS + JS |
 | Browser | open (auto-launch) |
 
+## Performance & Cost Optimizations
+
+CloneForge now includes several changes to reduce token usage, speed up generation, and lower cost during website cloning:
+
+- **Scrape caching** — Playwright scrape results are cached to `.cache/scraper/`. Repeat runs on the same URL reuse the cached data instead of re-launching a headless browser. Bypass with `FORCE_SCRAPE=1`.
+- **LLM response caching** — Identical prompt/model outputs are cached to `.cache/llm/` (best-effort). This significantly reduces repeated token usage for unchanged prompts. Disable with `NO_LLM_CACHE=1` or `LLM_CACHE=0`.
+- **Compact design brief** — The scraper produces a concise, token-friendly brief (≈800 chars) that is used in prompts instead of full HTML, and embedded scraped data is truncated to avoid large requests.
+- **Lower token budgets & tuned temps** — The agent uses conservative per-call `maxTokens` and `temperature` values to keep LLM responses compact and deterministic where appropriate.
+- **Controlled concurrency** — Section generation runs in parallel batches. By default `SECTION_CONCURRENCY = ceil(number_of_sections / 2)`. Override with `SECTION_CONCURRENCY=<n>` to balance speed vs rate-limit risk.
+- **Fewer improve cycles** — The improvement loop runs once by default and uses a slightly relaxed quality threshold to avoid repeated expensive refinement calls.
+
+These optimizations are enabled by default and can be tuned via environment variables (examples below).
+
+## Configuration / Environment Variables
+
+- `GEMINI_API_KEY` — required: set in `.env` as `GEMINI_API_KEY=...`.
+- `SECTION_CONCURRENCY` — optional override for parallel section generation (default: ceil(sections/2)).
+- `FORCE_SCRAPE=1` — force a fresh Playwright scrape (ignore `.cache/scraper/`).
+- `NO_LLM_CACHE=1` or `LLM_CACHE=0` — disable LLM response caching.
+
+Cache locations (project root):
+
+- `.cache/scraper/` — cached scraped site JSON
+- `.cache/llm/` — cached LLM responses
+
+Examples:
+
+```bash
+# default run (uses caches)
+npm start
+
+# force fresh scrape and disable LLM cache
+FORCE_SCRAPE=1 NO_LLM_CACHE=1 npm start
+
+# override concurrency
+SECTION_CONCURRENCY=1 npm start
+```
+
+## Changelog (recent updates)
+
+- Added scraper disk cache to avoid repeated Playwright runs.
+- Added LLM response disk cache to reuse identical prompt outputs and cut tokens.
+- Use a compact design brief and truncate embedded scraped data to reduce prompt size.
+- Reduced per-call token budgets and tuned temperatures for deterministic, smaller responses.
+- Added batched parallel section generation controlled by `SECTION_CONCURRENCY` (default = half the sections).
+- Reduced improvement iterations to limit repeated expensive LLM calls.
+
 ## 📝 License
 
 ISC
