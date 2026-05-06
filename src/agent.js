@@ -1,8 +1,9 @@
 // ─────────────────────────────────────────────
 // src/agent.js — Core agent logic with scrape → generate → improve loops
+// Includes pre-flight model health check and output validation
 // ─────────────────────────────────────────────
 
-import { askLLM, extractCode } from "./llm.js";
+import { askLLM, extractCode, verifyModelHealth, getModelName } from "./llm.js";
 import {
   planPrompt,
   generateSectionPrompt,
@@ -18,6 +19,7 @@ import {
   logError,
   logImprove,
   logSeparator,
+  logInfo,
   startSpinner,
   spinnerSuccess,
   spinnerFail,
@@ -25,13 +27,11 @@ import {
 import { writeHTML, writeJS, deriveFolderName, setOutputDir } from "./fileWriter.js";
 import { scrapeWebsite, formatDesignBrief } from "./scraper.js";
 
-const MAX_IMPROVE_ITERATIONS = 2;   // Number of improvement loops per section
-const MIN_QUALITY_SCORE = 8.5;      // Score threshold to skip further improvements
+const MAX_IMPROVE_ITERATIONS = 2;
+const MIN_QUALITY_SCORE = 8.5;
 
 /**
  * Extract a URL from the user instruction if present.
- * @param {string} input
- * @returns {string|null}
  */
 function extractURL(input) {
   const urlMatch = input.match(/https?:\/\/[^\s]+/);
@@ -39,12 +39,43 @@ function extractURL(input) {
 }
 
 /**
- * Main agent pipeline: scrape → plan → generate → improve → assemble → write
+ * Validate that generated HTML is meaningful (not empty/broken).
+ * @param {string} html
+ * @returns {boolean}
+ */
+function isValidHTML(html) {
+  if (!html || typeof html !== "string") return false;
+  const trimmed = html.trim();
+  if (trimmed.length < 50) return false;
+  // Must contain at least one HTML tag
+  if (!/<[a-z][\s\S]*>/i.test(trimmed)) return false;
+  return true;
+}
+
+/**
+ * Main agent pipeline: health-check → scrape → plan → generate → improve → assemble → write
  * @param {string} userInstruction - What the user wants
  * @returns {Promise<string>} Path to the generated index.html
  */
 export async function runAgent(userInstruction) {
   logSeparator();
+
+  // ══════════════════════════════════════════════
+  // STEP 0: PRE-FLIGHT MODEL HEALTH CHECK
+  // ══════════════════════════════════════════════
+  logAction(`Pre-flight check: verifying model "${getModelName()}" is ready...`);
+  const health = await verifyModelHealth();
+
+  if (!health.ok) {
+    logError("═══════════════════════════════════════════════════════");
+    logError("  ABORTING: Model is not available.");
+    logError(`  Reason: ${health.error}`);
+    logError("  No files will be created to avoid blank output.");
+    logError("═══════════════════════════════════════════════════════");
+    throw new Error(`Model health check failed: ${health.error}`);
+  }
+
+  logSuccess("Pre-flight check passed — model is ready to generate!");
 
   // ── Step 1: Understand the request ──
   logThinking("Understanding your request...");
@@ -94,6 +125,7 @@ export async function runAgent(userInstruction) {
 
   // ── Step 4: Generate each section with improvement loop ──
   const sectionCodes = {};
+  let failedSections = 0;
 
   for (const section of sections) {
     logSeparator();
@@ -108,10 +140,19 @@ export async function runAgent(userInstruction) {
         { maxTokens: 4096 }
       );
       code = extractCode(response, "html");
-      spinnerSuccess(genSpinner, `${section} — initial version generated`);
+
+      if (!isValidHTML(code)) {
+        spinnerFail(genSpinner, `${section} — generated code is empty or invalid`);
+        logError("LLM returned non-HTML content. Skipping section.");
+        failedSections++;
+        continue;
+      }
+
+      spinnerSuccess(genSpinner, `${section} — initial version generated (${code.length} chars)`);
     } catch (err) {
       spinnerFail(genSpinner, `Failed to generate ${section}`);
       logError(err.message);
+      failedSections++;
       continue;
     }
 
@@ -119,41 +160,37 @@ export async function runAgent(userInstruction) {
     for (let i = 1; i <= MAX_IMPROVE_ITERATIONS; i++) {
       logImprove(i, MAX_IMPROVE_ITERATIONS, `Evaluating ${section}...`);
 
-      // Evaluate current version
       const evalSpinner = startSpinner(`Evaluating ${section} quality...`);
       let evaluation;
       try {
         const evalResponse = await askLLM(evaluatePrompt(section, code, designBrief));
         evaluation = parseEvaluation(evalResponse);
-        spinnerSuccess(
-          evalSpinner,
-          `${section} quality score: ${evaluation.score}/10`
-        );
+        spinnerSuccess(evalSpinner, `${section} quality score: ${evaluation.score}/10`);
       } catch (err) {
         spinnerFail(evalSpinner, `Evaluation failed, continuing...`);
         break;
       }
 
-      // Skip improvement if quality is good enough
       if (evaluation.score >= MIN_QUALITY_SCORE) {
         logSuccess(`${section} meets quality threshold (${evaluation.score}/10). Moving on!`);
         break;
       }
 
-      // Apply improvements
-      logImprove(
-        i,
-        MAX_IMPROVE_ITERATIONS,
-        `Improving: ${evaluation.improvements.slice(0, 3).join(", ")}`
-      );
+      logImprove(i, MAX_IMPROVE_ITERATIONS, `Improving: ${evaluation.improvements.slice(0, 3).join(", ")}`);
       const improveSpinner = startSpinner(`Improving ${section}...`);
       try {
         const improvedResponse = await askLLM(
           improvePrompt(section, code, evaluation.improvements, designBrief),
           { maxTokens: 4096 }
         );
-        code = extractCode(improvedResponse, "html");
-        spinnerSuccess(improveSpinner, `${section} — improved (iteration ${i})`);
+        const improvedCode = extractCode(improvedResponse, "html");
+        if (isValidHTML(improvedCode)) {
+          code = improvedCode;
+          spinnerSuccess(improveSpinner, `${section} — improved (iteration ${i})`);
+        } else {
+          spinnerFail(improveSpinner, `Improvement returned invalid HTML, keeping previous version`);
+          break;
+        }
       } catch (err) {
         spinnerFail(improveSpinner, `Improvement failed`);
         break;
@@ -162,6 +199,21 @@ export async function runAgent(userInstruction) {
 
     sectionCodes[section] = code;
     logSuccess(`${section.toUpperCase()} — finalized ✨`);
+  }
+
+  // ── Check if we have enough valid sections ──
+  const validSections = Object.keys(sectionCodes).length;
+  if (validSections === 0) {
+    logError("═══════════════════════════════════════════════════════");
+    logError("  ABORTING: No sections were generated successfully.");
+    logError("  This usually means the model ran out of tokens or is returning errors.");
+    logError("  No output files were created.");
+    logError("═══════════════════════════════════════════════════════");
+    throw new Error("All sections failed to generate. Check model quota/status.");
+  }
+
+  if (failedSections > 0) {
+    logInfo(`⚠ ${failedSections} section(s) failed, continuing with ${validSections} valid sections.`);
   }
 
   // ── Step 5: Generate JavaScript ──
@@ -185,6 +237,12 @@ export async function runAgent(userInstruction) {
   try {
     const shellResponse = await askLLM(assemblePrompt(siteData));
     shellHTML = extractCode(shellResponse, "html");
+
+    if (!isValidHTML(shellHTML)) {
+      logInfo("Shell HTML from LLM was invalid, using fallback shell.");
+      shellHTML = getFallbackShell(siteData);
+    }
+
     spinnerSuccess(assembleSpinner, "HTML shell created");
   } catch (err) {
     spinnerFail(assembleSpinner, "Shell generation failed, using fallback");
@@ -194,11 +252,17 @@ export async function runAgent(userInstruction) {
   // Inject all sections into the shell
   const allSectionsHTML = sections
     .map((s) => sectionCodes[s] || "")
+    .filter(Boolean)
     .join("\n\n");
-  const finalHTML = shellHTML.replace(
-    "<!-- SECTIONS_PLACEHOLDER -->",
-    allSectionsHTML
-  );
+
+  let finalHTML = shellHTML.replace("<!-- SECTIONS_PLACEHOLDER -->", allSectionsHTML);
+
+  // ── Final validation ──
+  if (!isValidHTML(finalHTML) || finalHTML.trim().length < 200) {
+    logError("Final assembled HTML is suspiciously small or invalid.");
+    logError("Building a safe fallback with inline sections...");
+    finalHTML = getFallbackShell(siteData).replace("<!-- SECTIONS_PLACEHOLDER -->", allSectionsHTML);
+  }
 
   // ── Step 7: Write output files ──
   logSeparator();
@@ -210,16 +274,25 @@ export async function runAgent(userInstruction) {
 
   logSeparator();
   logSuccess("🎉 Website generation complete!");
+  logInfo(`Total sections generated: ${validSections}/${sections.length}`);
+  logInfo(`Output: ${htmlPath}`);
 
   return htmlPath;
 }
 
 /**
- * Improve a specific section on demand (for interactive "improve <section>" command).
+ * Improve a specific section on demand.
  */
 export async function improveSection(sectionName, currentHTML) {
   logSeparator();
   logAction(`Re-improving section: ${sectionName}`);
+
+  // Quick health check before improvement
+  const health = await verifyModelHealth();
+  if (!health.ok) {
+    logError(`Cannot improve: ${health.error}`);
+    return null;
+  }
 
   const evalSpinner = startSpinner(`Evaluating ${sectionName}...`);
   let evaluation;
@@ -239,6 +312,10 @@ export async function improveSection(sectionName, currentHTML) {
       { maxTokens: 4096 }
     );
     const code = extractCode(improved, "html");
+    if (!isValidHTML(code)) {
+      spinnerFail(improveSpinner, "Improved code was empty/invalid");
+      return null;
+    }
     spinnerSuccess(improveSpinner, `${sectionName} improved!`);
     return code;
   } catch {
@@ -293,7 +370,7 @@ function parseEvaluation(response) {
 
 function getFallbackShell(siteData = null) {
   const title = siteData?.title || "Cloned Website";
-  const desc = siteData?.metaDesc || "A cute website clone generated by CloneForge. 🎀✨";
+  const desc = siteData?.metaDesc || "A website clone generated by CloneForge. 🎀✨";
   const font = siteData?.fonts?.[0] || "Inter";
 
   return `<!DOCTYPE html>

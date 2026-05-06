@@ -6,7 +6,7 @@
 
 import readline from "node:readline";
 import fs from "node:fs";
-import { initLLM } from "./src/llm.js";
+import { initLLM, verifyModelHealth, getModelName } from "./src/llm.js";
 import { runAgent, improveSection } from "./src/agent.js";
 import {
   printBanner,
@@ -24,6 +24,20 @@ import open from "open";
 // ── Initialize ──
 printBanner();
 initLLM();
+
+// ── Pre-flight model health check at startup ──
+logInfo(`Model: ${getModelName()}`);
+const startupHealth = await verifyModelHealth();
+if (!startupHealth.ok) {
+  logError("══════════════════════════════════════════════════");
+  logError("  ⚠  MODEL IS NOT AVAILABLE AT STARTUP");
+  logError(`  Reason: ${startupHealth.error}`);
+  logError("  You can still try commands, but generation will likely fail.");
+  logError("  Fix: check your API key, quota, or switch models in src/llm.js");
+  logError("══════════════════════════════════════════════════");
+} else {
+  logSuccess(`Model "${getModelName()}" verified — ready to generate!`);
+}
 
 // ── State ──
 let lastGeneratedPath = null;
